@@ -55,3 +55,28 @@ def escolher_proxima_nota(contexto, tonica_midi, escala_graus): # decide a proxi
     nota_escolhida = sorted(candidatos_midi, key = lambda k:score_melodico_avancado(k,contexto), reverse=True)[random.randint(0,len(candidatos_midi)-1)] # pra ele não tender sempre as opcoes mais obvias
 
     return nota_escolhida
+
+def variacao_melodica(frase_original, escala_midi): # mantem o ritmo e altera a tonalidade de uma nota
+    frase_alterada_melodica = [dict(evento) for evento in frase_original]
+    
+    indices_de_notas = [i for i, evento in enumerate(frase_alterada_melodica) if evento['type'] == 'note']
+
+    if not indices_de_notas or not escala_midi:
+        return frase_original
+
+    indice_a_trocar = random.choice(indices_de_notas)
+    
+    nota_antiga = frase_alterada_melodica[indice_a_trocar]['pitch']
+    nova_nota = nota_antiga
+
+
+    if len(escala_midi) > 1:
+      while nova_nota == nota_antiga:
+          nova_nota = random.choice(escala_midi)
+
+    frase_alterada_melodica[indice_a_trocar]['pitch'] = nova_nota
+    
+    print(f"A nota de índice {indice_a_trocar} foi escolhida. A nova nota eh {nova_nota}")
+
+
+    return frase_alterada_melodica

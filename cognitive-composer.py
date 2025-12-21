@@ -37,32 +37,6 @@ def inversao(frase_original): # mantem o ritmo e toca as notas na ordem contrari
     print (f"A frase invertida eh {frase_invertida}")
     return frase_invertida
 
-
-def variacao_melodica(frase_original, escala_midi): # mantem o ritmo e altera a tonalidade de uma nota
-    frase_alterada_melodica = [dict(evento) for evento in frase_original]
-    
-    indices_de_notas = [i for i, evento in enumerate(frase_alterada_melodica) if evento['type'] == 'note']
-
-    if not indices_de_notas or not escala_midi:
-        return frase_original
-
-    indice_a_trocar = random.choice(indices_de_notas)
-    
-    nota_antiga = frase_alterada_melodica[indice_a_trocar]['pitch']
-    nova_nota = nota_antiga
-
-
-    if len(escala_midi) > 1:
-      while nova_nota == nota_antiga:
-          nova_nota = random.choice(escala_midi)
-
-    frase_alterada_melodica[indice_a_trocar]['pitch'] = nova_nota
-    
-    print(f"A nota de índice {indice_a_trocar} foi escolhida. A nova nota eh {nova_nota}")
-
-
-    return frase_alterada_melodica
-    
 def diminuir_motivo(frase_original): # mantem as notas e o ritmo, tirando as ultimas duas
     print("Diminuicao Escolhida!")
     frase_menor = frase_original [:-2]
@@ -76,14 +50,14 @@ def variacao(frase_original, escala_midi): # escolhe dentre os tipos diferentes 
             return rhythm.variacao_ritmica(frase_original)
         case 2: 
             print("Variacao Melodica Escolhida!")
-            return variacao_melodica(frase_original,escala_midi)
+            return melody.variacao_melodica(frase_original,escala_midi)
         case 3: 
             print("Inversao Escolhida!")
             return inversao(frase_original)
         case 4:
             print("Variacao Ritmica + Variacao Melodica Escolhida!")
             frase_variada = rhythm.variacao_ritmica(frase_original)
-            return variacao_melodica(frase_variada, escala_midi)
+            return melody.variacao_melodica(frase_variada, escala_midi)
         case 5:
             return diminuir_motivo(frase_original)
 
