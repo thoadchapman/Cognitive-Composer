@@ -101,31 +101,6 @@ def inversao(frase_original): # mantem o ritmo e toca as notas na ordem contrari
     print (f"A frase invertida eh {frase_invertida}")
     return frase_invertida
 
-def variacao_ritmica(frase_original): # mantem as notas e altera a duracao de uma nota
-    frase_alterada = [dict(e) for e in frase_original]
-    indices_notas = [i for i, e in enumerate(frase_alterada) if e['type'] == 'note']
-    
-    if len(indices_notas) < 2:
-        return frase_original
-    
-    idx1, idx2 = random.sample(indices_notas, 2)
-    
-    duracoes = [0.25, 0.5, 1.0, 2.0]
-    duracao_antiga = frase_alterada[idx1]['duration']
-    nova_duracao = random.choice([d for d in duracoes if d != duracao_antiga])
-    
-    variacao_duracao = nova_duracao - duracao_antiga
-    
-    # CORRIGIDO: Impede que a duração de uma nota se torne negativa ou zero
-    if frase_alterada[idx2]['duration'] - variacao_duracao <= 0:
-        print("Variação rítmica ignorada para evitar duração negativa.")
-        return frase_original
-        
-    frase_alterada[idx1]['duration'] = nova_duracao
-    frase_alterada[idx2]['duration'] -= variacao_duracao
-    
-    print(f"Índice {idx1} trocado. Variação de duração: {variacao_duracao:.2f}")
-    return frase_alterada
 
 def variacao_melodica(frase_original, escala_midi): # mantem o ritmo e altera a tonalidade de uma nota
     frase_alterada_melodica = [dict(evento) for evento in frase_original]
@@ -162,7 +137,7 @@ def variacao(frase_original, escala_midi): # escolhe dentre os tipos diferentes 
     match escolhido:
         case 1: 
             print("Variacao Ritmica Escolhida!")
-            return variacao_ritmica(frase_original)
+            return rhythm.variacao_ritmica(frase_original)
         case 2: 
             print("Variacao Melodica Escolhida!")
             return variacao_melodica(frase_original,escala_midi)
@@ -171,7 +146,7 @@ def variacao(frase_original, escala_midi): # escolhe dentre os tipos diferentes 
             return inversao(frase_original)
         case 4:
             print("Variacao Ritmica + Variacao Melodica Escolhida!")
-            frase_variada = variacao_ritmica(frase_original)
+            frase_variada = rhythm.variacao_ritmica(frase_original)
             return variacao_melodica(frase_variada, escala_midi)
         case 5:
             return diminuir_motivo(frase_original)
