@@ -1,8 +1,7 @@
 import random
-from dados import musical_data
+from data import musical_data
+from musical_structures import rhythm
 from midiutil import MIDIFile
-
-
 
 def midi_para_grau(nota_midi, tonica_midi): # transforma a nota em midi para o seu equivalente em graus
     if nota_midi is None: return 'rest'
@@ -30,30 +29,6 @@ def gerar_candidatos(grau_anterior, tonica_midi, escala_graus): # procura no dic
 
         return midi_escolhidos_limpos
 
-def gerar_motivo_ritmico(ONSET_COUNT_WEIGHTS, RHYTHM_DNA_DATABASE, POSITIONAL_PROPERTY_WEIGHTS): # decide uma sequencia de intervalos com base em ritmos e claves populares 
-    num_notas = random.choices(list(ONSET_COUNT_WEIGHTS.keys()),weights = list(ONSET_COUNT_WEIGHTS.values()), k=1)[0]
-    
-    intervalos = random.choice(RHYTHM_DNA_DATABASE[num_notas])
-    print(f'intervalos escolhidos: {intervalos}')
-    
-    primeiro_onset = random.choices(list(POSITIONAL_PROPERTY_WEIGHTS['mainbeat onsets'].keys()),weights=list(POSITIONAL_PROPERTY_WEIGHTS['mainbeat onsets'].values()), k=1)[0]
-    print(f'primeiro onset na beat: {primeiro_onset}')
-    
-    onsets = []
-    onsets.append(int(primeiro_onset))
-    
-    for i in range(1, num_notas):
-        onset = (onsets[i-1]) + (intervalos[i-1])
-        onsets.append(onset)
-    
-    print (f"Onsets: {onsets}")
-
-    if len(onsets) > 1:
-        duracoes = [(onsets[i+1] - onsets[i]) * 0.25 for i in range(len(onsets)-1)]
-        duracoes.append((17 - onsets[-1]) * 0.25)
-    else:
-        duracoes = [4.0] 
-    return duracoes
 
 def score_melodico_avancado(pitch_candidato, contexto): # cria um placar que procura a proxima nota mais esperada
     if not contexto['notas_midi']:
@@ -208,7 +183,7 @@ def montar_secao_completa(tonica_midi, escala_graus): # monta uma secao formal c
     'notas_midi': [],
     'intervalos': []
     } # incializa o historico
-    ritmo_A = gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
+    ritmo_A = rhythm.gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
     melodia_A = gerar_frase_inteligente(ritmo_A, tonica_midi, escala_graus, contexto)
 
     frase_A = definir_evento_musical(melodia_A, ritmo_A) # une a melodia e o ritmo gerados
@@ -219,7 +194,7 @@ def montar_secao_completa(tonica_midi, escala_graus): # monta uma secao formal c
     frase_A_variada1 = variacao(frase_A, escala_midi)
     frase_A_variada2 = variacao(frase_A, escala_midi)
     
-    ritmo_B = gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
+    ritmo_B = rhythm.gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
     melodia_B = gerar_frase_inteligente(ritmo_B, tonica_midi, escala_graus, contexto)
     frase_B = definir_evento_musical(melodia_B, ritmo_B)
 
