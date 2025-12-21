@@ -1,6 +1,7 @@
 import random
 from data import musical_data
 from musical_structures import rhythm
+from musical_structures import harmony
 from midiutil import MIDIFile
 
 def midi_para_grau(nota_midi, tonica_midi): # transforma a nota em midi para o seu equivalente em graus
@@ -74,17 +75,6 @@ def gerar_frase_inteligente(ritmo, tonica_midi, escala_graus, contexto): # receb
     
     return frase_melodica # retorna a melodia (sem as duracoes)
 
-def gerar_progressao_complexa(tonalidade, DICT_PROGRESSOES): # escolhe uma progressao comum e deixa mais complexa com substituicoes funcionais
-    if tonalidade == None: tonalidade = 'maior'
-    progressao_escolhida = random.choice(DICT_PROGRESSOES[tonalidade]['progressoes'])
-    substituicoes = DICT_PROGRESSOES[tonalidade]['substituicoes']
-    progressao_nova = []
-    for acorde in progressao_escolhida:
-        if acorde in substituicoes and random.random() < 0.4: # adiciona uma chance em 40% de substituir o acorde
-            progressao_nova.append(random.choice(substituicoes[acorde]))
-        else:
-            progressao_nova.append(acorde)
-    return progressao_nova
 
 def definir_evento_musical(melodia, ritmo): # recebe uma melodia e um ritmo e os formaliza em um dicionario
     frase_musical = []
@@ -248,8 +238,8 @@ if __name__ == "__main__":
 
     refrao = montar_secao_completa(tonica_refrao, escala_refrao)
 
-    harmonia_verso = gerar_progressao_complexa('maior', musical_data.DICT_PROGRESSOES)
-    harmonia_refrao = gerar_progressao_complexa('maior', musical_data.DICT_PROGRESSOES)
+    harmonia_verso = harmony.gerar_progressao_complexa('maior', musical_data.DICT_PROGRESSOES)
+    harmonia_refrao = harmony.gerar_progressao_complexa('maior', musical_data.DICT_PROGRESSOES)
     musica_toda = [verso, refrao]
     harmonia_toda = [harmonia_verso, harmonia_refrao]
 
