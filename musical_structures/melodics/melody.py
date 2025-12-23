@@ -1,5 +1,6 @@
 import random
 from data import musical_data
+from infrastructure import infra
 
 def midi_para_grau(nota_midi, tonica_midi): # transforma a nota em midi para o seu equivalente em graus
     if nota_midi is None: return 'rest'
@@ -9,6 +10,16 @@ def grau_para_midi(grau, tonica_midi): # transforma o grau para o seu equivalent
     if grau == 'rest': return None
     intervalo = musical_data.GRAU_PARA_INTERVALO.get((grau))
     return tonica_midi + intervalo if intervalo is not None else None
+
+def gerar_frase_inteligente(ritmo, tonica_midi, escala_graus, contexto): # recebe o ritmo e comeca a "eleicao" da proxima nota
+    frase_melodica = [] 
+    for duracao in ritmo: 
+        nota_atual = escolher_proxima_nota(contexto, tonica_midi, escala_graus) # escolhe a nota a ser tocada com base nos escores melodicos huron
+        frase_melodica.append(nota_atual) # adiciona na lista 
+        infra.atualizar_contexto(contexto, nota_atual)
+    
+    return frase_melodica # retorna a melodia (sem as duracoes)
+
 
 def gerar_candidatos(grau_anterior, tonica_midi, escala_graus): # procura no dicionario de probabilidades melodicas e cria uma lista com todas que podem ser escolhidas
         transicoes_brutas = musical_data.PROBABILIDADES_MELODICAS.get(grau_anterior) 
@@ -80,3 +91,4 @@ def variacao_melodica(frase_original, escala_midi): # mantem o ritmo e altera a 
 
 
     return frase_alterada_melodica
+

@@ -5,17 +5,6 @@ from musical_structures import harmony
 from musical_structures.melodics import melody
 from infrastructure import infra
 
-
-def gerar_frase_inteligente(ritmo, tonica_midi, escala_graus, contexto): # recebe o ritmo e comeca a "eleicao" da proxima nota
-    frase_melodica = [] 
-    for duracao in ritmo: 
-        nota_atual = melody.escolher_proxima_nota(contexto, tonica_midi, escala_graus) # escolhe a nota a ser tocada com base nos escores melodicos huron
-        frase_melodica.append(nota_atual) # adiciona na lista 
-        infra.atualizar_contexto(contexto, nota_atual)
-    
-    return frase_melodica # retorna a melodia (sem as duracoes)
-
-
 # TIPOS DE VARIACAO:
 
 def inversao(frase_original): # mantem o ritmo e toca as notas na ordem contraria
@@ -56,7 +45,7 @@ def montar_secao_completa(tonica_midi, escala_graus): # monta uma secao formal c
     'intervalos': []
     } # incializa o historico
     ritmo_A = rhythm.gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
-    melodia_A = gerar_frase_inteligente(ritmo_A, tonica_midi, escala_graus, contexto)
+    melodia_A = melody.gerar_frase_inteligente(ritmo_A, tonica_midi, escala_graus, contexto)
 
     frase_A = infra.definir_evento_musical(melodia_A, ritmo_A) # une a melodia e o ritmo gerados
 
@@ -67,7 +56,7 @@ def montar_secao_completa(tonica_midi, escala_graus): # monta uma secao formal c
     frase_A_variada2 = variacao(frase_A, escala_midi)
     
     ritmo_B = rhythm.gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
-    melodia_B = gerar_frase_inteligente(ritmo_B, tonica_midi, escala_graus, contexto)
+    melodia_B = melody.gerar_frase_inteligente(ritmo_B, tonica_midi, escala_graus, contexto)
     frase_B = infra.definir_evento_musical(melodia_B, ritmo_B)
 
     return [frase_A, frase_A_variada1, frase_B, frase_A_variada2]
