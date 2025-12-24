@@ -5,6 +5,8 @@ from musical_structures import harmony
 from musical_structures.melodics import melody
 from infrastructure import infra
 
+repertorio = {}
+
 # TIPOS DE VARIACAO:
 
 def inversao(frase_original): # mantem o ritmo e toca as notas na ordem contraria
