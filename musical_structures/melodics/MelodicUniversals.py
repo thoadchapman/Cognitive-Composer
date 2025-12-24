@@ -24,6 +24,7 @@ class MelodicUniversals:
         if not self.leap: return
         return False if self.calculate_proximity() <= 0 else True
     
+    
 
 if __name__ == "__main__":
     test = MelodicUniversals(60,63)
