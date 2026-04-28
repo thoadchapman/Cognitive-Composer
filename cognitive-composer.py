@@ -46,7 +46,7 @@ def montar_secao_completa(tonica_midi, escala_graus): # monta uma secao formal c
     'notas_midi': [],
     'intervalos': []
     } # incializa o historico
-    ritmo_A = rhythm.gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
+    ritmo_A = rhythm.gerar_motivo_ritmico()
     melodia_A = melody.gerar_frase_inteligente(ritmo_A, tonica_midi, escala_graus, contexto)
 
     frase_A = infra.definir_evento_musical(melodia_A, ritmo_A) # une a melodia e o ritmo gerados
@@ -57,7 +57,7 @@ def montar_secao_completa(tonica_midi, escala_graus): # monta uma secao formal c
     frase_A_variada1 = variacao(frase_A, escala_midi)
     frase_A_variada2 = variacao(frase_A, escala_midi)
     
-    ritmo_B = rhythm.gerar_motivo_ritmico(musical_data.ONSET_COUNT_WEIGHTS, musical_data.RHYTHM_DNA_DATABASE, musical_data.POSITIONAL_PROPERTY_WEIGHTS)
+    ritmo_B = rhythm.gerar_motivo_ritmico()
     melodia_B = melody.gerar_frase_inteligente(ritmo_B, tonica_midi, escala_graus, contexto)
     frase_B = infra.definir_evento_musical(melodia_B, ritmo_B)
 

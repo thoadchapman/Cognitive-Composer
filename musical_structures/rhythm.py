@@ -1,12 +1,36 @@
 import random
+from data import musical_data
 
-def gerar_motivo_ritmico(ONSET_COUNT_WEIGHTS, RHYTHM_DNA_DATABASE, POSITIONAL_PROPERTY_WEIGHTS): # decide uma sequencia de intervalos com base em ritmos e claves populares 
-    num_notas = random.choices(list(ONSET_COUNT_WEIGHTS.keys()),weights = list(ONSET_COUNT_WEIGHTS.values()), k=1)[0]
-    
-    intervalos = random.choice(RHYTHM_DNA_DATABASE[num_notas])
+ONSET_WEIGHTS_BASE = musical_data.ONSET_COUNT_WEIGHTS
+RHYTHM_DNA_BASE = musical_data.RHYTHM_DNA_DATABASE
+POS_WEIGHTS_BASE = musical_data.POSITIONAL_PROPERTY_WEIGHTS
+
+def gerar_motivo_ritmico(): # decide uma sequencia de intervalos com base em ritmos e claves populares 
+    num_notas = random.choices(list(ONSET_WEIGHTS_BASE.keys()), weights = list(ONSET_WEIGHTS_BASE.values()), k=1)[0]
+
+    intervalos = random.choice(RHYTHM_DNA_BASE[num_notas])
     print(f'intervalos escolhidos: {intervalos}')
     
-    primeiro_onset = random.choices(list(POSITIONAL_PROPERTY_WEIGHTS['mainbeat onsets'].keys()),weights=list(POSITIONAL_PROPERTY_WEIGHTS['mainbeat onsets'].values()), k=1)[0]
+    primeiro_onset = random.choices(list(POS_WEIGHTS_BASE['mainbeat onsets'].keys()),weights=list(POS_WEIGHTS_BASE['mainbeat onsets'].values()), k=1)[0]
+    print(f'primeiro onset na beat: {primeiro_onset}')
+    
+    onsets = []
+    onsets.append(int(primeiro_onset))
+    
+    for i in range(1, num_notas):
+        onset = (onsets[i-1]) + (intervalos[i-1])
+        onsets.append(onset)
+    
+    return onset_to_duracoes(onsets)
+
+
+def gerar_motivo_ritmico(onset_weights, rhythm_dna, pos_weights): # decide uma sequencia de intervalos com base em ritmos e claves populares 
+    num_notas = random.choices(list(onset_weights.keys()),weights = list(onset_weights.values()), k=1)[0]
+
+    intervalos = random.choice(rhythm_dna[num_notas])
+    print(f'intervalos escolhidos: {intervalos}')
+    
+    primeiro_onset = random.choices(list(pos_weights['mainbeat onsets'].keys()),weights=list(pos_weights['mainbeat onsets'].values()), k=1)[0]
     print(f'primeiro onset na beat: {primeiro_onset}')
     
     onsets = []
@@ -18,12 +42,15 @@ def gerar_motivo_ritmico(ONSET_COUNT_WEIGHTS, RHYTHM_DNA_DATABASE, POSITIONAL_PR
     
     print (f"Onsets: {onsets}")
 
+    return onset_to_duracoes(onsets)
+
+def onset_to_duracoes(onsets):
     if len(onsets) > 1:
         duracoes = [(onsets[i+1] - onsets[i]) * 0.25 for i in range(len(onsets)-1)]
         duracoes.append((17 - onsets[-1]) * 0.25)
     else:
         duracoes = [4.0] 
-    return duracoes
+    return duracoes    
 
 def variacao_ritmica(frase_original): # mantem as notas e altera a duracao de uma nota
     frase_alterada = [dict(e) for e in frase_original]
