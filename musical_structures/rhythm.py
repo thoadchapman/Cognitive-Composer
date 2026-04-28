@@ -23,7 +23,6 @@ def gerar_motivo_ritmico(): # decide uma sequencia de intervalos com base em rit
     
     return onset_to_duracoes(onsets)
 
-
 def gerar_motivo_ritmico(onset_weights, rhythm_dna, pos_weights): # decide uma sequencia de intervalos com base em ritmos e claves populares 
     num_notas = random.choices(list(onset_weights.keys()),weights = list(onset_weights.values()), k=1)[0]
 
@@ -67,7 +66,6 @@ def variacao_ritmica(frase_original): # mantem as notas e altera a duracao de um
     
     variacao_duracao = nova_duracao - duracao_antiga
     
-    # CORRIGIDO: Impede que a duração de uma nota se torne negativa ou zero
     if frase_alterada[idx2]['duration'] - variacao_duracao <= 0:
         print("Variação rítmica ignorada para evitar duração negativa.")
         return frase_original
