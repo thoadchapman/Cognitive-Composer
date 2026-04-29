@@ -70,7 +70,7 @@ def escolher_proxima_nota(contexto, tonica_midi, escala_graus): # decide a proxi
 
     return nota_escolhida
 
-def variacao_melodica(frase_original, escala_midi): # mantem o ritmo e altera a tonalidade de uma nota
+def variar_melodia(frase_original, escala_midi): # mantem o ritmo e altera a tonalidade de uma nota
     frase_alterada_melodica = [dict(evento) for evento in frase_original]
     
     indices_de_notas = [i for i, evento in enumerate(frase_alterada_melodica) if evento['type'] == 'note']
@@ -82,7 +82,6 @@ def variacao_melodica(frase_original, escala_midi): # mantem o ritmo e altera a 
     
     nota_antiga = frase_alterada_melodica[indice_a_trocar]['pitch']
     nova_nota = nota_antiga
-
 
     if len(escala_midi) > 1:
       while nova_nota == nota_antiga:

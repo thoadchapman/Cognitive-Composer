@@ -4,40 +4,12 @@ from musical_structures import rhythm
 from musical_structures import harmony
 from musical_structures.melodics import melody
 from infrastructure import infra
-
+import variations
 repertorio = {}
 
 # TIPOS DE VARIACAO:
 
-def inversao(frase_original): # mantem o ritmo e toca as notas na ordem contraria
-    frase_invertida = frase_original[:] 
-    frase_invertida.reverse()
-    print (f"A frase invertida eh {frase_invertida}")
-    return frase_invertida
 
-def diminuir_motivo(frase_original): # mantem as notas e o ritmo, tirando as ultimas duas
-    print("Diminuicao Escolhida!")
-    frase_menor = frase_original [:-2]
-    return frase_menor
-
-def variacao(frase_original, escala_midi): # escolhe dentre os tipos diferentes de variacao disponiveis
-    escolhido = random.randint(1,5)
-    match escolhido:
-        case 1: 
-            print("Variacao Ritmica Escolhida!")
-            return rhythm.variacao_ritmica(frase_original)
-        case 2: 
-            print("Variacao Melodica Escolhida!")
-            return melody.variacao_melodica(frase_original,escala_midi)
-        case 3: 
-            print("Inversao Escolhida!")
-            return inversao(frase_original)
-        case 4:
-            print("Variacao Ritmica + Variacao Melodica Escolhida!")
-            frase_variada = rhythm.variacao_ritmica(frase_original)
-            return melody.variacao_melodica(frase_variada, escala_midi)
-        case 5:
-            return diminuir_motivo(frase_original)
 
 # GERACAO COMPLETA:
 
@@ -54,8 +26,8 @@ def montar_secao_completa(tonica_midi, escala_graus): # monta uma secao formal c
     escala_midi = [melody.grau_para_midi(g, tonica_midi) for g in escala_graus if g != 'rest']
     escala_midi = [nota for nota in escala_midi if nota is not None] 
     
-    frase_A_variada1 = variacao(frase_A, escala_midi)
-    frase_A_variada2 = variacao(frase_A, escala_midi)
+    frase_A_variada1 = variations.variar(frase_A, escala_midi)
+    frase_A_variada2 = variations.variar(frase_A, escala_midi)
     
     ritmo_B = rhythm.gerar_motivo_ritmico()
     melodia_B = melody.gerar_frase_inteligente(ritmo_B, contexto)

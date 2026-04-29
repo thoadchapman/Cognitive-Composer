@@ -33,7 +33,7 @@ def onset_to_duracoes(onsets):
         duracoes = [4.0] 
     return duracoes    
 
-def variacao_ritmica(frase_original): # mantem as notas e altera a duracao de uma nota
+def variar_ritmo(frase_original): # mantem as notas e altera a duracao de uma nota
     frase_alterada = [dict(e) for e in frase_original]
     indices_notas = [i for i, e in enumerate(frase_alterada) if e['type'] == 'note']
     
