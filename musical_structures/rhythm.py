@@ -5,25 +5,7 @@ ONSET_WEIGHTS_BASE = musical_data.ONSET_COUNT_WEIGHTS
 RHYTHM_DNA_BASE = musical_data.RHYTHM_DNA_DATABASE
 POS_WEIGHTS_BASE = musical_data.POSITIONAL_PROPERTY_WEIGHTS
 
-def gerar_motivo_ritmico(): # decide uma sequencia de intervalos com base em ritmos e claves populares 
-    num_notas = random.choices(list(ONSET_WEIGHTS_BASE.keys()), weights = list(ONSET_WEIGHTS_BASE.values()), k=1)[0]
-
-    intervalos = random.choice(RHYTHM_DNA_BASE[num_notas])
-    print(f'intervalos escolhidos: {intervalos}')
-    
-    primeiro_onset = random.choices(list(POS_WEIGHTS_BASE['mainbeat onsets'].keys()),weights=list(POS_WEIGHTS_BASE['mainbeat onsets'].values()), k=1)[0]
-    print(f'primeiro onset na beat: {primeiro_onset}')
-    
-    onsets = []
-    onsets.append(int(primeiro_onset))
-    
-    for i in range(1, num_notas):
-        onset = (onsets[i-1]) + (intervalos[i-1])
-        onsets.append(onset)
-    
-    return onset_to_duracoes(onsets)
-
-def gerar_motivo_ritmico(onset_weights, rhythm_dna, pos_weights): # decide uma sequencia de intervalos com base em ritmos e claves populares 
+def gerar_motivo_ritmico(onset_weights=ONSET_WEIGHTS_BASE, rhythm_dna=RHYTHM_DNA_BASE, pos_weights=POS_WEIGHTS_BASE): # decide uma sequencia de intervalos com base em ritmos e claves populares 
     num_notas = random.choices(list(onset_weights.keys()),weights = list(onset_weights.values()), k=1)[0]
 
     intervalos = random.choice(rhythm_dna[num_notas])
