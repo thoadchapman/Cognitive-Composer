@@ -85,6 +85,10 @@ DICT_PROGRESSOES = {
 
 }
 
+ESCALAS = {
+    'pentatonica_maior': ['1', '2', '3', '5', '6', 'rest'] 
+}
+
 ACORDES_MIDI = {
     'I': [48, 52, 55], 'Imaj7': [48, 52, 55, 59], 'ii': [50, 53, 57], 
     'iii': [52, 55, 59], 'IV': [53, 57, 60], 'IVmaj7': [53, 57, 60, 64], 
