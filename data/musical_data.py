@@ -55,7 +55,7 @@ POSITIONAL_PROPERTY_WEIGHTS = {
     }
 }
 DICT_PROGRESSOES = {
-    'maior': {
+    'major': {
         'progressoes': [
             # Clássicas
             ['I', 'V', 'vi', 'IV'],
@@ -82,9 +82,10 @@ DICT_PROGRESSOES = {
     },
 
 }
-ESCALAS = {
-    'pentatonica_maior': ['1', '2', '3', '5', '6', 'rest'] 
-}
+ESCALAS_MOLDE = {
+    'major_pentatonic': [0, 2, 4, 7, 9],
+    'minor_pentatonic': [0, 3, 5, 7, 10]
+    }
 ACORDES_MIDI = {
     'I': [48, 52, 55], 'Imaj7': [48, 52, 55, 59], 'ii': [50, 53, 57], 
     'iii': [52, 55, 59], 'IV': [53, 57, 60], 'IVmaj7': [53, 57, 60, 64], 
@@ -92,32 +93,43 @@ ACORDES_MIDI = {
     'V7/IV': [48, 52, 55, 58], 'V7/V': [50, 54, 57, 60], 'V7/vi': [52, 56, 59, 62]
     }
 
-def midi_para_grau(nota_midi, tonica_midi): # transforma a nota em midi para o seu equivalente em graus
+def filtrar_para_escala(ultimo_midi, escala):
+    return {nota:chance for nota,chance in PROBABILIDADES_INHARMONICAS.get(ultimo_midi) if nota in escala}
+
+def scale_to_midi(escala,tonica_midi):
+    escala_midi = [degree_to_midi(grau, tonica_midi) for grau in escala if grau != 'rest']
+    escala_midi = [nota for nota in escala_midi if nota is not None] 
+    return escala_midi
+
+def midi_to_degree(nota_midi, tonica_midi): # transforma a nota em midi para o seu equivalente em graus
     if nota_midi is None: return 'rest'
     return INTERVALO_PARA_GRAU.get((nota_midi - tonica_midi)%12,'1')
 
-def grau_para_midi(grau, tonica_midi): # transforma o grau para o seu equivalente em midi
+def degree_to_midi(grau, tonica_midi): # transforma o grau para o seu equivalente em midi
     if grau == 'rest': return None
     intervalo = GRAU_PARA_INTERVALO.get((grau))
     return tonica_midi + intervalo if intervalo is not None else None
 
-def grau_para_intervalo_midi(grau):
+def degree_to_interval(grau):
     if grau == 'rest': return None
     intervalo = GRAU_PARA_INTERVALO.get((grau))
     return intervalo if intervalo is not None else None    
 
-def criar_probs_inharmonicas():
+def gerar_probs_inharmonicas():
     probs_inharmonicas = {}
-    for grau_anterior in PROBABILIDADES_MELODICAS:
-        for grau_atual in PROBABILIDADES_MELODICAS[grau_anterior]:
-            intervalo = grau_para_intervalo_midi(grau_atual)
-            probabilidade = PROBABILIDADES_MELODICAS[grau_anterior][grau_atual]
-            if intervalo in probs_inharmonicas:
-                probs_inharmonicas[intervalo] += probabilidade
+    for degree_a in PROBABILIDADES_MELODICAS.keys():
+        interval_a = degree_to_interval(degree_a)
+        chances_for_next_interval = {}
+        for candidate_degree in PROBABILIDADES_MELODICAS[degree_a]:
+            candidate_interval = degree_to_interval(candidate_degree)
+            candidate_chance_to_be_next = PROBABILIDADES_MELODICAS[degree_a][candidate_degree]
+            if candidate_interval in chances_for_next_interval:
+                chances_for_next_interval[candidate_interval] += candidate_chance_to_be_next
             else:
-                probs_inharmonicas[intervalo] = probabilidade
+                chances_for_next_interval[candidate_interval] = candidate_chance_to_be_next
+        probs_inharmonicas[interval_a] = chances_for_next_interval
     return probs_inharmonicas
 
 
-if __name__ == '__main__':
-    print(criar_probs_inharmonicas())
+PROBABILIDADES_INHARMONICAS = gerar_probs_inharmonicas()
+

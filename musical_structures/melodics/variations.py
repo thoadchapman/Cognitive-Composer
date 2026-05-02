@@ -1,15 +1,12 @@
 import random
-from rhythm import variar_ritmo
-from melody import variar_melodia
+from musical_structures.rhythm import variar_ritmo
+from musical_structures.melodics.melody import variar_melodia
 
 def inverter(frase_original): # mantem o ritmo e toca as notas na ordem contraria
-    frase_invertida = frase_original[:] 
-    frase_invertida.reverse()
-    return frase_invertida
+    return frase_original.inverter()
 
 def diminuir(frase_original): # mantem as notas e o ritmo, tirando as ultimas duas
-    frase_menor = frase_original [:-2]
-    return frase_menor
+    return frase_original.diminuir()
 
 def variar(frase_original, escala_midi): # escolhe dentre os tipos diferentes de variacao disponiveis
     escolhido = random.randint(1,5)
