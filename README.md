@@ -29,7 +29,7 @@ O processo de composição é dividido em módulos lógicos para simular uma abo
     ```
 3.  Execute o script principal:
     ```bash
-    python compositor.py
+    python cognitive-composer.py
     ```
 
 ### Próximos Passos
