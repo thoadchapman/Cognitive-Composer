@@ -1,4 +1,5 @@
-from Note import Note
+from random import choice, sample
+from musical_structures.musical_units import Note
 
 class Phrase:
     def __init__(self,notes):
@@ -26,6 +27,42 @@ class Phrase:
             new_notes.extend(other.notes)
         self.notes = new_notes
         return self
+    
+    def get_notes(self):
+        return self.notes
+    
+    def inverter(self):
+        nova_frase = self.notes.copy()
+        nova_frase.reverse()
+        return Phrase(nova_frase)
+
+    def diminuir(self):
+        nova_frase = self.notes.copy()
+        nova_frase = nova_frase[:-2]
+        return Phrase(nova_frase)
+
+    def variar_ritmo(self):    
+        nova_frase = self.notes.copy()
+        nota1, nota2 = sample(nova_frase, 2)
+        
+        duracoes = [0.25, 0.5, 1.0, 2.0]
+        duracao_antiga = nota1.get_duration()
+        nova_duracao = choice([d for d in duracoes if d != duracao_antiga])
+        variacao_duracao = nova_duracao - duracao_antiga
+        
+        if nota2.get_duration() - variacao_duracao <= 0:
+            print("Variação rítmica ignorada para evitar duração negativa.")
+            return self
+            
+        nota1.set_duration(nova_duracao)
+        nota2.add_duration(-variacao_duracao)
+        return Phrase(nova_frase)   
+
+    def variar_melodia(self, escala_midi):
+        nova_frase = self.notes.copy()
+        nota = choice(nova_frase)
+        nota.set_pitch(choice(escala_midi))
+        return Phrase(nova_frase)
 
 if __name__ == "__main__":
     test1 = Note(60,4)
